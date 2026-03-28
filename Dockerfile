@@ -1,13 +1,18 @@
+# 使用輕量級 Python 映像檔
 FROM python:3.11-slim
 
+# 設定工作目錄
 WORKDIR /app
 
-# 1. 修正路徑：直接去 app 目錄抓清單
-COPY app/requirements.txt .
+# 先複製零件清單並安裝
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 2. 複製所有檔案
+# 複製倉庫內所有檔案 (包含 main.py)
 COPY . .
 
-# 3. 啟動指令：明確指定 app.main:app
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# 開啟 8080 端口
+EXPOSE 8080
+
+# 啟動指令：直接執行根目錄的 main.py 裡的 app
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
