@@ -1,14 +1,13 @@
 FROM python:3.11-slim
-LABEL "language"="python"
-LABEL "framework"="fastapi"
 
 WORKDIR /app
 
-COPY requirements.txt .
+# 1. 修正路徑：直接去 app 目錄抓清單
+COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# 2. 複製所有檔案
 COPY . .
 
-EXPOSE 8080
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+# 3. 啟動指令：明確指定 app.main:app
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
